@@ -1,0 +1,10 @@
+[package]
+name = "echobird"
+version = "2.0.0"
+edition = "2021"
+description = "The Nexus for Models, Agents & Vibe Coding — built with Tauri + Rust"
+license = "MIT"
+repository = "https://github.com/edison7009/Echobird-MotherAgent"
+
+# Source code is proprietary. Download the pre-built binary from Releases.
+# https://github.com/edison7009/Echobird-MotherAgent/releases
