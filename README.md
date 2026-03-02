@@ -6,7 +6,7 @@
 
 <p align="center">
   The Nexus for <strong>Models</strong>, <strong>Agents</strong> &amp; <strong>Vibe Coding</strong>.<br/>
-  <sub>One hub to manage AI models, coding tools, and intelligent agents — built with Tauri + Rust.</sub>
+  <sub>A cyberpunk control panel for the AI era — built with Tauri + Rust.</sub>
 </p>
 
 <p align="center">
@@ -18,11 +18,17 @@
 </p>
 
 <p align="center">
-  <b>English</b> ·
+  <strong>English</strong> ·
   <a href="./README.zh-CN.md">简体中文</a> ·
   <a href="./README.zh-TW.md">繁體中文</a> ·
   <a href="./README.ja.md">日本語</a> ·
-  <a href="./README.ko.md">한국어</a>
+  <a href="./README.ko.md">한국어</a> ·
+  <a href="./README.es.md">Español</a> ·
+  <a href="./README.fr.md">Français</a> ·
+  <a href="./README.de.md">Deutsch</a> ·
+  <a href="./README.pt.md">Português</a> ·
+  <a href="./README.ru.md">Русский</a> ·
+  <a href="./README.ar.md">العربية</a>
 </p>
 
 ---
@@ -43,36 +49,36 @@
 
 ## ✨ What is Echobird?
 
-Echobird is a desktop application that gives you a **unified, visual control panel** for all your AI coding tools. No more editing config files — switch models with one click.
+Echobird is a desktop application that provides a **visual, unified interface** for managing AI models across your coding tools. No more digging through config files — just point, click, and switch.
 
-### Pain Points
+### The Problem
 
-- 😫 Switching models in tools like Claude Code, Cline, or Roo Code requires manual config edits
-- 🔄 Every tool has its own model configuration format
-- 🧩 No convenient way to manage skills and extensions
+- 😫 Switching AI models in tools like Claude Code requires editing config files manually
+- 🔄 Each tool has its own model configuration format
+- 🧩 No easy way to manage skills and extensions across tools
 
-### Solution
+### The Solution
 
-Echobird is the **central control panel** for all your AI coding tools:
+Echobird acts as a **central control panel** for all your AI-powered coding tools:
 
-- 🎯 **One-click model switching** — visually switch AI models for any supported tool
-- 🔀 **Dual protocol** — OpenAI & Anthropic API support, change anytime
-- 🚇 **Smart tunnel proxy** — access restricted APIs without a global VPN
-- 🧩 **Skill Browser** — discover, install and manage AI skills
-- 🖥️ **Local LLM Server** — run open-source models locally via llama.cpp (Qwen, DeepSeek, Llama)
-- 🔌 **Remote LLM** — connect to remote LLM servers (deploy your own agents)
-- 🌍 **28 Languages** — full internationalization
-- 🌃 **Cyberpunk UI** — neon-green terminal aesthetic
+- 🎯 **One-Click Model Switching** — Visually switch AI models for any supported tool
+- 🔀 **Dual Protocol** — OpenAI & Anthropic API support, switch models anytime
+- 🚇 **Smart Tunnel Proxy** — Access geo-restricted APIs without a full VPN
+- 🧩 **Skill Browser** — Discover, install, and manage AI skills
+- 🖥️ **Local LLM Server** — Run open-source models (Qwen, DeepSeek, Llama) locally via llama.cpp
+- 🔌 **Remote LLM** — Connect to remote LLM servers and deploy your own agents
+- 🌍 **28 Languages** — Full i18n support for a global audience
+- 🌃 **Cyberpunk UI** — Stunning neon-green terminal aesthetic
 
 ## 🖼️ Screenshots
 
-### Model Nexus — Manage all AI models in one place
+### Model Nexus — Manage all your AI models in one place
 ![Model Nexus](./1.png)
 
-### App Manager — Switch models for all coding tools in one click
+### App Manager — One-click model switching for all coding tools
 ![App Manager](./2.png)
 
-### Local Server — Run open-source models via llama.cpp
+### Local Server — Run open-source models locally with llama.cpp
 ![Local Server](./3.png)
 
 ### Skill Browser — Discover and install AI skills
@@ -98,7 +104,7 @@ chmod +x Echobird_*.AppImage
 ./Echobird_*.AppImage
 ```
 
-> If you get a FUSE error: `sudo apt install libfuse2`
+> If you encounter FUSE errors: `sudo apt install libfuse2`
 
 ## 🔧 Supported Tools
 
@@ -111,20 +117,26 @@ chmod +x Echobird_*.AppImage
 | Continue | ✅ Supported | ✅ | OpenAI |
 | OpenCode | ✅ Supported | ✅ | OpenAI |
 | Codex | ✅ Supported | ✅ | OpenAI |
-| Aider | ✅ Supported | ✅ | OpenAI |
+| Aider | ✅ Supported | ✅ | OpenAI / Anthropic |
+| ZeroClaw | ✅ Supported | ✅ | OpenAI |
 
 ## 🏗️ Tech Stack
 
-- **Tauri 2** — cross-platform desktop framework (Rust backend)
-- **Rust** — high-performance native backend
+- **Tauri 2** — Cross-platform desktop framework (Rust backend)
+- **Rust** — High-performance native backend
 - **React + TypeScript** — UI framework
-- **Vanilla CSS** — custom cyberpunk design system
-- **Vite** — build tool
-- **llama.cpp** — local model inference engine
+- **Vanilla CSS** — Custom cyberpunk design system
+- **Vite** — Build tool
+- **llama.cpp** — Local model inference engine
+
+## 📬 Contact
+
+- 📧 Email: [hi@echobird.ai](mailto:hi@echobird.ai)
+- 🐛 Bug Reports: [GitHub Issues](https://github.com/edison7009/Echobird-MotherAgent/issues)
 
 ## ⭐ Support
 
-If Echobird helps you, give it a ⭐ on GitHub — it helps others discover the project!
+If you find Echobird useful, please give it a ⭐ on GitHub — it helps others discover the project!
 
 ## 📄 License
 
@@ -133,6 +145,6 @@ If Echobird helps you, give it a ⭐ on GitHub — it helps others discover the 
 ---
 
 <p align="center">
-  Built with 💚 by the Echobird Team<br/>
-  <sub>📧 <a href="mailto:hi@echobird.ai">hi@echobird.ai</a></sub>
+  Made with 💚 by the Echobird Team<br/>
+  <sub>🌐 <a href="https://echobird.ai">echobird.ai</a></sub>
 </p>
