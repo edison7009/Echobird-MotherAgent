@@ -1,0 +1,7 @@
+# Echobird is a Tauri desktop app — mark website files as documentation
+# so GitHub language stats reflect the actual tech stack
+*.html linguist-documentation=true
+*.json linguist-documentation=true
+
+# These are the actual source languages (in the private dev repo):
+# Rust 99.8% · TypeScript 0.2%
