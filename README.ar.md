@@ -1,12 +1,12 @@
-﻿<p align="center">
+<p align="center">
   <img src="./icon.png" alt="Echobird" width="120" />
 </p>
 
 <h1 align="center">Echobird</h1>
 
 <p align="center">
-  The Nexus for <strong>Models</strong>, <strong>Agents</strong> & <strong>Vibe Coding</strong>.<br/>
-  <sub>Echobird هو تطبيق سطح مكتب يوفر</sub>
+  مركز النماذج والوكلاء وVibe Coding.<br/>
+  <sub>لوحة تحكم سايبربانك لعصر الذكاء الاصطناعي — مبني بـ Tauri + Rust.</sub>
 </p>
 
 <p align="center">
@@ -14,133 +14,65 @@
     <img src="https://img.shields.io/github/v/release/edison7009/Echobird-MotherAgent?style=flat-square&color=00FF9D" alt="Release" />
   </a>
   <img src="https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-blue?style=flat-square" alt="Platform" />
-  <img src="https://img.shields.io/github/license/edison7009/Echobird-MotherAgent?style=flat-square" alt="License" />
+  <img src="https://img.shields.io/badge/built%20with-Tauri%20%2B%20Rust-orange?style=flat-square" alt="Tauri + Rust" />
 </p>
 
 <p align="center">
-  <a href="./README.md">English</a> · <a href="./README.zh-CN.md">简体中�?/a> · <a href="./README.zh-TW.md">繁體中文</a> · <a href="./README.ja.md">日本�?/a> · <a href="./README.ko.md">한국�?/a> · <a href="./README.es.md">Español</a> · <a href="./README.fr.md">Français</a> · <a href="./README.de.md">Deutsch</a> · <a href="./README.pt.md">Português</a> · <a href="./README.ru.md">Русский</a> · **العربية**
+  <a href="./README.md">English</a> ·
+  <a href="./README.zh-CN.md">简体中文</a> ·
+  <a href="./README.zh-TW.md">繁體中文</a> ·
+  <a href="./README.ja.md">日本語</a> ·
+  <a href="./README.ko.md">한국어</a> ·
+  <a href="./README.es.md">Español</a> ·
+  <a href="./README.fr.md">Français</a> ·
+  <a href="./README.de.md">Deutsch</a> ·
+  <a href="./README.pt.md">Português</a> ·
+  <a href="./README.ru.md">Русский</a> ·
+  <strong>العربية</strong>
 </p>
 
 ---
 
-## �?ما هو Echobird؟
+## 🤖 MotherAgent — الميزة الرئيسية
 
-Echobird هو تطبيق سطح مكتب يوفر **واجهة مرئية وموحدة** لإدارة نماذج الذكاء الاصطناعي عبر أدوات البرمجة الخاصة بك. لا مزيد من البحث في ملفات التكوين �?فقط انقر وبدّل.
+**MotherAgent** هو عميل الذكاء الاصطناعي المستقل المدمج في Echobird:
 
-### المشكلة
+- 🧠 **التفكير والتخطيط** — يقسم المهام المعقدة إلى خطوات قابلة للتنفيذ
+- 🔧 **استخدام الأدوات** — ينفذ أوامر Shell ويقرأ الملفات ويتصفح الويب
+- 🔄 **التصحيح الذاتي** — يراجع مخرجاته ويعيد المحاولة عند الخطأ
+- 💾 **الذاكرة المستمرة** — تبقى محادثاتك بعد إعادة تشغيل التطبيق
+- ⚡ **يعمل مع أي LLM** — اتصل بـ OpenAI أو Anthropic أو النماذج المحلية
 
-- 😫 تبديل نماذج الذكاء الاصطناعي في أدوات مثل OpenClaw يتطلب تعديل ملفات التكوين يدوياً
-- 🔄 كل أداة لها تنسيق تكوين النماذج الخاص بها
-- 🧩 لا توجد طريقة سهلة لإدارة المهارات والإضافات عبر الأدوات
+---
 
-### الحل
+## ✨ ما هو Echobird؟
 
-Echobird يعمل كـ **لوحة تحكم مركزية** لجميع أدوات البرمجة بالذكاء الاصطناعي:
+Echobird تطبيق سطح مكتب يوفر **واجهة موحدة ومرئية** لإدارة نماذج الذكاء الاصطناعي عبر جميع أدوات البرمجة.
 
-- 🎯 **تبديل النموذج بنقرة واحدة** �?بدّل نماذج الذكاء الاصطناعي بصرياً لأي أداة مدعومة
-- 🔀 **بروتوكول مزدوج** �?دعم OpenAI و Anthropic API، بدّل النماذج في أي وقت
-- 🚇 **وكيل نفق ذكي** �?الوصول إلى واجهات برمجة التطبيقات المحظورة جغرافياً بدون VPN كامل
-- 🧩 **متصفح المهارات** �?اكتشف وثبّت وأدر مهارات الذكاء الاصطناعي
-- 🖥�?**خادم النماذج المحلي** �?شغّل نماذج مفتوحة المصدر (Qwen، DeepSeek، Llama) محلياً عبر llama.cpp
-- 🌍 **28 لغة** �?دعم كامل للتدويل
-- 🎮 **تطبيقات ذكاء اصطناعي مدمجة** �?ألعاب وأدوات تفاعلية مثل Reversi و AI Translate
-- 🌃 **واجهة هاكر سايبربانك** �?جمالية طرفية بالنيون الأخضر تجعل البرمجة مستقبلية
-
-## 🖼�?لقطات الشاشة
-
-### Model Nexus �?أدر جميع نماذج الذكاء الاصطناعي في مكان واحد
-![Model Nexus](1.png)
-
-### App Manager �?تبديل النموذج بنقرة واحدة لجميع الأدوات
-![App Manager](2.png)
-
-### Local Server �?شغّل نماذج مفتوحة المصدر محلياً مع llama.cpp
-![Local Server](3.png)
-
-### Skill Browser �?اكتشف وثبّت مهارات الذكاء الاصطناعي
-![Skill Browser](4.png)
+- 🎯 **تبديل النماذج بنقرة واحدة**
+- 🔀 **بروتوكول مزدوج** — OpenAI & Anthropic API
+- 🚇 **بروكسي نفق ذكي** — الوصول إلى APIs المحدودة بدون VPN عالمي
+- 🧩 **متصفح المهارات** — اكتشاف وتثبيت مهارات الذكاء الاصطناعي
+- 🖥️ **خادم LLM محلي** — تشغيل النماذج مفتوحة المصدر محلياً عبر llama.cpp
+- 🌍 **28 لغة** — دعم كامل للتدويل
+- 🌃 **واجهة سايبربانك** — جمالية طرفية خضراء نيون
 
 ## 🚀 البداية السريعة
 
-### تحميل
+| المنصة | التنزيل |
+|--------|---------|
+| Windows | [Echobird-x64-setup.exe](https://github.com/edison7009/Echobird-MotherAgent/releases/latest) |
+| macOS (Apple Silicon) | [Echobird_aarch64.dmg](https://github.com/edison7009/Echobird-MotherAgent/releases/latest) |
+| macOS (Intel) | [Echobird_x64.dmg](https://github.com/edison7009/Echobird-MotherAgent/releases/latest) |
+| Linux | [Echobird_amd64.AppImage](https://github.com/edison7009/Echobird-MotherAgent/releases/latest) |
 
-احصل على أحدث إصدار لمنصتك:
+## 📄 الترخيص
 
-| المنصة | تحميل |
-|----------|----------|
-| Windows  | [Echobird-Setup.exe](https://github.com/edison7009/Echobird-MotherAgent/releases/latest) |
-| macOS    | [Echobird.dmg](https://github.com/edison7009/Echobird-MotherAgent/releases/latest) |
-| Linux    | [Echobird.AppImage](https://github.com/edison7009/Echobird-MotherAgent/releases/latest) |
-
-### ملاحظات Linux
-
-```bash
-chmod +x Echobird-*.AppImage
-./Echobird-*.AppImage
-```
-
-> إذا واجهت أخطاء FUSE: `sudo apt install libfuse2`
-
-## 🔧 الأدوات المدعومة
-
-| الأداة | الحالة | تبديل النموذج | البروتوكول |
-|------|--------|----------------|----------|
-| OpenClaw | �?مدعوم | �?| OpenAI / Anthropic |
-| Claude Code | �?مدعوم | �?| Anthropic |
-| Cline | �?مدعوم | �?| OpenAI |
-| Continue | �?مدعوم | �?| OpenAI |
-| OpenCode | �?مدعوم | �?| OpenAI |
-| Codex | �?مدعوم | �?| OpenAI |
-| Roo Code | �?مدعوم | �?| OpenAI |
-
-## 🏗�?المكدس التقني
-
-- **Electron** �?إطار عمل سطح مكتب متعدد المنصات
-- **React + TypeScript** �?إطار عمل واجهة المستخدم
-- **Vanilla CSS** �?نظام تصميم سايبربانك مخصص
-- **Vite** �?أداة البناء
-- **llama.cpp** �?محرك استدلال النماذج المحلي
-
-## 🛠�?التطوير
-
-```bash
-npm install
-npm run dev
-npm run build
-```
-
-## 🤝 المساهمة
-
-المساهمات مرحب بها! لا تتردد في فتح issues أو إرسال pull requests.
-
-We're especially looking for help with:
-- 🍎 **اختبار macOS** �?لم نختبر بناء macOS بالكامل بعد
-- 🔧 **تكاملات جديدة** �?ساعدنا في إضافة دعم لمزيد من أدوات الذكاء الاصطناعي
-- 🌐 **تحسين الترجمات** �?المتحدثون الأصليون مرحب بهم!
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'feat: add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📬 Contact
-
-- 📧 Email: [hi@echobird.ai](mailto:hi@echobird.ai)
-- 🐛 Bug Reports: [GitHub Issues](https://github.com/edison7009/Echobird/issues)
-- 💬 Discussions: [GitHub Discussions](https://github.com/edison7009/Echobird/discussions)
-
-## �?الدعم
-
-إذا وجدت Echobird مفيداً، فكّر في إعطائه �?على GitHub �?يساعد الآخرين على اكتشاف المشروع!
-
-## 📄 الرخصة
-
-[MIT](../LICENSE)
+[MIT](./LICENSE)
 
 ---
 
 <p align="center">
-  صنع بـ 💚 من فريق Echobird<br/>
-  <sub>📧 <a href="mailto:hi@echobird.ai">hi@echobird.ai</a></sub>
+  صُنع بـ 💚 من فريق Echobird<br/>
+  <sub>🌐 <a href="https://echobird.ai">echobird.ai</a></sub>
 </p>
