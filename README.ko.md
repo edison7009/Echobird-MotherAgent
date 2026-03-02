@@ -1,5 +1,5 @@
-<p align="center">
-  <img src="./icon.png" alt="Echobird" width="120" />
+﻿<p align="center">
+  <img src="../build/icon.png" alt="Echobird" width="120" />
 </p>
 
 <h1 align="center">Echobird</h1>
@@ -18,7 +18,7 @@
 </p>
 
 <p align="center">
-  <a href="./README.md">English</a> ·
+  <a href="../README.md">English</a> ·
   <a href="./README.zh-CN.md">简体中文</a> ·
   <a href="./README.zh-TW.md">繁體中文</a> ·
   <a href="./README.ja.md">日本語</a> ·
@@ -68,7 +68,7 @@ Echobird는 AI 코딩 도구 전반에 걸쳐 **통합된 모델 관리 인터�
 
 ## 📄 라이선스
 
-[MIT](./LICENSE)
+[MIT](../LICENSE)
 
 ---
 

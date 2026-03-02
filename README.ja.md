@@ -1,5 +1,5 @@
-<p align="center">
-  <img src="./icon.png" alt="Echobird" width="120" />
+﻿<p align="center">
+  <img src="../build/icon.png" alt="Echobird" width="120" />
 </p>
 
 <h1 align="center">Echobird</h1>
@@ -18,7 +18,7 @@
 </p>
 
 <p align="center">
-  <a href="./README.md">English</a> ·
+  <a href="../README.md">English</a> ·
   <a href="./README.zh-CN.md">简体中文</a> ·
   <a href="./README.zh-TW.md">繁體中文</a> ·
   <strong>日本語</strong> ·
@@ -68,7 +68,7 @@ Echobird は、AI コーディングツール全体で**統一されたモデル
 
 ## 📄 ライセンス
 
-[MIT](./LICENSE)
+[MIT](../LICENSE)
 
 ---
 

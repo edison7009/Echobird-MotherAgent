@@ -1,5 +1,5 @@
-<p align="center">
-  <img src="./icon.png" alt="Echobird" width="120" />
+﻿<p align="center">
+  <img src="../build/icon.png" alt="Echobird" width="120" />
 </p>
 
 <h1 align="center">Echobird</h1>
@@ -18,7 +18,7 @@
 </p>
 
 <p align="center">
-  <a href="./README.md">English</a> ·
+  <a href="../README.md">English</a> ·
   <strong>简体中文</strong> ·
   <a href="./README.zh-TW.md">繁體中文</a> ·
   <a href="./README.ja.md">日本語</a> ·
@@ -140,7 +140,7 @@ chmod +x Echobird_*.AppImage
 
 ## 📄 许可证
 
-[MIT](./LICENSE)
+[MIT](../LICENSE)
 
 ---
 
