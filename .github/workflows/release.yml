@@ -79,8 +79,17 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      attestations: write
 
     steps:
+      - name: Checkout public repo
+        uses: actions/checkout@v4
+
+      - name: Create tag
+        run: |
+          git tag ${{ github.event.client_payload.tag }} || true
+          git push origin ${{ github.event.client_payload.tag }} || true
+
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
@@ -93,7 +102,7 @@ jobs:
           tag_name: ${{ github.event.client_payload.tag }}
           name: Echobird ${{ github.event.client_payload.tag }}
           draft: true
-          generate_release_notes: true
+          generate_release_notes: false
           files: artifacts/**/*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
