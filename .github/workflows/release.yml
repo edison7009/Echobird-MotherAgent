@@ -101,6 +101,19 @@ jobs:
           path: artifacts/
           merge-multiple: true
 
+      - name: Deduplicate release assets
+        run: |
+          mkdir -p release-assets
+          find artifacts/ -type f \( -name "*.exe" -o -name "*.msi" -o -name "*.dmg" -o -name "*.deb" -o -name "*.rpm" -o -name "*.AppImage" \) | while read f; do
+            base=$(basename "$f")
+            if [ ! -f "release-assets/$base" ]; then
+              cp "$f" "release-assets/$base"
+              echo "✅ $base"
+            else
+              echo "⏭️ Skipping duplicate: $base"
+            fi
+          done
+
       - name: Publish release
         uses: softprops/action-gh-release@v2
         with:
@@ -108,6 +121,6 @@ jobs:
           name: Echobird ${{ github.event.client_payload.tag }}
           draft: true
           generate_release_notes: false
-          files: artifacts/**/*
+          files: release-assets/*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
