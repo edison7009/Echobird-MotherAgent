@@ -69,6 +69,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: release-${{ matrix.platform }}-${{ strategy.job-index }}
+          retention-days: 3
           path: |
             src-tauri/target/**/release/bundle/**/*.exe
             src-tauri/target/**/release/bundle/**/*.msi
