@@ -78,6 +78,10 @@ jobs:
           elif [[ "${{ matrix.platform }}" == "ubuntu-22.04" ]]; then
             cargo build --release
             cp target/release/echobird-bridge ../bridge-linux-x86_64
+            # Cross-compile for Linux aarch64
+            cargo install cross --git https://github.com/cross-rs/cross 2>/dev/null || true
+            cross build --release --target aarch64-unknown-linux-gnu
+            cp target/aarch64-unknown-linux-gnu/release/echobird-bridge ../bridge-linux-aarch64
           elif [[ "${{ matrix.platform }}" == "windows-latest" ]]; then
             cargo build --release
             cp target/release/echobird-bridge.exe ../bridge-win.exe
@@ -96,6 +100,10 @@ jobs:
           elif [[ "${{ matrix.platform }}" == "ubuntu-22.04" ]]; then
             cargo build --release
             cp target/release/llm-server ../llm-server-linux-x86_64
+            # Cross-compile for Linux aarch64
+            cargo install cross --git https://github.com/cross-rs/cross 2>/dev/null || true
+            cross build --release --target aarch64-unknown-linux-gnu
+            cp target/aarch64-unknown-linux-gnu/release/llm-server ../llm-server-linux-aarch64
           elif [[ "${{ matrix.platform }}" == "windows-latest" ]]; then
             cargo build --release
             cp target/release/llm-server.exe ../llm-server-win.exe
