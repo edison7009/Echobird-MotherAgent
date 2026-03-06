@@ -83,6 +83,24 @@ jobs:
             cp target/release/echobird-bridge.exe ../bridge-win.exe
           fi
 
+      - name: Build llm-server binary
+        shell: bash
+        run: |
+          cd plugins/llm-server
+          if [[ "${{ matrix.args }}" == *"aarch64-apple-darwin"* ]]; then
+            cargo build --release --target aarch64-apple-darwin
+            cp target/aarch64-apple-darwin/release/llm-server ../llm-server-darwin-aarch64
+          elif [[ "${{ matrix.args }}" == *"x86_64-apple-darwin"* ]]; then
+            cargo build --release --target x86_64-apple-darwin
+            cp target/x86_64-apple-darwin/release/llm-server ../llm-server-darwin-x86_64
+          elif [[ "${{ matrix.platform }}" == "ubuntu-22.04" ]]; then
+            cargo build --release
+            cp target/release/llm-server ../llm-server-linux-x86_64
+          elif [[ "${{ matrix.platform }}" == "windows-latest" ]]; then
+            cargo build --release
+            cp target/release/llm-server.exe ../llm-server-win.exe
+          fi
+
       - name: Upload app artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -97,15 +115,14 @@ jobs:
             src-tauri/target/**/release/bundle/**/*.rpm
           if-no-files-found: warn
 
-      - name: Upload bridge artifact
+      - name: Upload plugin artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: bridge-${{ matrix.platform }}-${{ strategy.job-index }}
+          name: plugins-${{ matrix.platform }}-${{ strategy.job-index }}
           retention-days: 3
           path: |
-            plugins/openclaw/bridge-linux-*
-            plugins/openclaw/bridge-darwin-*
-            plugins/openclaw/bridge-win*
+            plugins/openclaw/bridge-*
+            plugins/llm-server-*
           if-no-files-found: warn
 
   publish-release:
@@ -133,7 +150,7 @@ jobs:
       - name: Deduplicate release assets
         run: |
           mkdir -p release-assets
-          find artifacts/ -type f \( -name "*.exe" -o -name "*.msi" -o -name "*.dmg" -o -name "*.deb" -o -name "*.rpm" -o -name "*.AppImage" -o -name "bridge-*" \) | while read f; do
+          find artifacts/ -type f \( -name "*.exe" -o -name "*.msi" -o -name "*.dmg" -o -name "*.deb" -o -name "*.rpm" -o -name "*.AppImage" -o -name "bridge-*" -o -name "llm-server-*" \) | while read f; do
             base=$(basename "$f")
             if [ ! -f "release-assets/$base" ]; then
               cp "$f" "release-assets/$base"
