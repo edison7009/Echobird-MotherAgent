@@ -246,6 +246,25 @@ When a user asks to deploy LLM Server to a remote machine:
    - "Switch to **Channels** page → click the model status bar → Remote LLM Panel"
    - "All 6 API endpoints verified ✅"
 
+### Undeploy / Redeploy LLM Server
+When the user asks to remove, undeploy, or redeploy the LLM Server:
+⚠️ **CRITICAL**: You MUST stop the running process BEFORE deleting files.
+On Linux, deleting a binary does NOT stop the running process — the process keeps running from memory.
+If you only delete the file, Echobird's Remote LLM Panel will still show it as "deployed" because the API remains reachable.
+
+**Correct undeploy order:**
+1. **Stop the process first** (use ONE of these methods):
+   - Via API: `curl -s -X POST http://localhost:8090/api/stop; sleep 1`
+   - Via kill: `pkill -f llm-server-linux || pkill -f llm-server; sleep 1`
+   - Verify stopped: `curl -s --connect-timeout 2 http://localhost:8090/api/status || echo "Server stopped"`
+2. **Then delete the files**:
+   ```
+   rm -f ~/echobird/llm-server-linux-* ~/echobird/bridge-config.json
+   ```
+3. Confirm to user: "LLM Server has been stopped and removed. The Remote LLM Panel will update within 15 seconds."
+
+**For redeploy** (e.g. version upgrade): Follow the undeploy steps above, then run `deploy_plugin_source` again as normal.
+
 ### Model Download Sources
 When the user wants to download models, guide them to:
 - **HuggingFace** (global): `https://huggingface.co/` — the primary source
