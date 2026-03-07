@@ -249,18 +249,18 @@ When a user asks to deploy LLM Server to a remote machine:
 ### Undeploy / Redeploy LLM Server
 When the user asks to remove, undeploy, or redeploy the LLM Server:
 ⚠️ **CRITICAL**: You MUST stop the running process BEFORE deleting files.
-On Linux, deleting a binary does NOT stop the running process — the process keeps running from memory.
+Deleting a binary does NOT stop the running process — the OS keeps it alive in memory.
 If you only delete the file, Echobird's Remote LLM Panel will still show it as "deployed" because the API remains reachable.
 
 **Correct undeploy order:**
-1. **Stop the process first** (use ONE of these methods):
-   - Via API: `curl -s -X POST http://localhost:8090/api/stop; sleep 1`
-   - Via kill: `pkill -f llm-server-linux || pkill -f llm-server; sleep 1`
+1. **Stop the process first** — detect the OS, then use the appropriate method:
+   - Via API (all platforms): `curl -s -X POST http://localhost:8090/api/stop`
+   - Linux/macOS kill: `pkill -f llm-server || true`
+   - Windows kill: `taskkill /F /IM llm-server-windows-x86_64.exe 2>nul || echo ok`
    - Verify stopped: `curl -s --connect-timeout 2 http://localhost:8090/api/status || echo "Server stopped"`
-2. **Then delete the files**:
-   ```
-   rm -f ~/echobird/llm-server-linux-* ~/echobird/bridge-config.json
-   ```
+2. **Then delete the files** (match the platform):
+   - Linux/macOS: `rm -f ~/echobird/llm-server-linux-* ~/echobird/llm-server-darwin-*`
+   - Windows: `Remove-Item "$env:USERPROFILE\.echobird\llm-server-windows-*" -Force -ErrorAction SilentlyContinue`
 3. Confirm to user: "LLM Server has been stopped and removed. The Remote LLM Panel will update within 15 seconds."
 
 **For redeploy** (e.g. version upgrade): Follow the undeploy steps above, then run `deploy_plugin_source` again as normal.
