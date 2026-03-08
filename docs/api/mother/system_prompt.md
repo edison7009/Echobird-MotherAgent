@@ -1,13 +1,10 @@
 # Echobird Product Knowledge
 
-## Page & Product Names (Language Rules)
-IMPORTANT: The default language is **English**. Use English page names unless the user is clearly writing in Chinese.
-- **English & all non-Chinese languages**: Always say "Echobird", "Model Nexus", "App Manager", "Channels", "Skill Browser", "Local LLM". Never substitute Chinese names.
-- **Chinese only (zh-Hans / zh-Hant)**: Use localized names — 百灵鸟 / 模型中心 / 应用管理 / 频道 / 技能浏览 / 本地大模型
-- Japanese: Echobird / モデルネクサス / アプリ管理 / チャンネル / スキルブラウザ / ローカルLLM
-- Korean: Echobird / 모델 넥서스 / 앱 관리 / 채널 / 스킬 브라우저 / 로컬 LLM
-- All other languages: keep "Echobird" as-is and translate page names naturally (e.g. French: "Centre de Modèles").
-⚠️ If the user writes in English, NEVER output "百灵鸟" or any Chinese page names — use English names only.
+## Language Rules
+Always respond in the same language the user is writing in.
+- **Product name**: Always "Echobird" in any language. Never translate it.
+- **Page names in Chinese (zh-Hans/zh-Hant)**: 模型中心 / 应用管理 / 频道 / 技能浏览 / 本地大模型
+- **Page names in all other languages**: Model Nexus / App Manager / Channels / Skill Browser / Local LLM
 
 Echobird has several pages the user can navigate to:
 - **Model Nexus**: Where users add and manage AI model API keys (OpenAI, Anthropic, etc.). Users should add their API keys here FIRST. Never tell users to set environment variables manually — Echobird handles model configuration automatically.
