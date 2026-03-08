@@ -60,6 +60,32 @@ jobs:
       - name: Install frontend dependencies
         run: npm install
 
+      - name: Validate i18n files (encoding + syntax)
+        shell: bash
+        run: |
+          node --input-type=module << 'EOF'
+          import { readFileSync, readdirSync } from 'fs';
+          import { join } from 'path';
+          const dir = 'src/i18n';
+          const files = readdirSync(dir).filter(f => f.endsWith('.ts') && f !== 'types.ts' && f !== 'index.ts');
+          let errors = 0;
+          for (const f of files) {
+            const text = readFileSync(join(dir, f), 'utf8');
+            const fffd = (text.match(/\uFFFD/g) || []).length;
+            if (fffd > 0) { console.error(`FAIL ${f}: ${fffd} U+FFFD replacement chars`); errors++; }
+            // Check for unterminated string lines (odd single-quote count)
+            const lines = text.split('\n');
+            for (let i = 0; i < lines.length; i++) {
+              if (/^\s+'[^']+':/.test(lines[i])) {
+                const q = (lines[i].replace(/\\'/g, '').match(/'/g) || []).length;
+                if (q % 2 !== 0) { console.error(`FAIL ${f}:${i+1}: unterminated string: ${lines[i].trim().slice(0,60)}`); errors++; }
+              }
+            }
+          }
+          if (errors === 0) console.log(`✓ All ${files.length} i18n files clean`);
+          else { console.error(`\n${errors} i18n error(s) found`); process.exit(1); }
+          EOF
+
       - name: Build Tauri app
         uses: tauri-apps/tauri-action@v0
         env:
