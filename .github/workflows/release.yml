@@ -99,7 +99,7 @@ jobs:
       - name: Build bridge binary
         shell: bash
         run: |
-          cd bridge
+          cd bridge-src
           if [[ "${{ matrix.args }}" == *"aarch64-apple-darwin"* ]]; then
             cargo build --release --target aarch64-apple-darwin
             cp target/aarch64-apple-darwin/release/echobird-bridge bridge-darwin-aarch64
@@ -138,7 +138,7 @@ jobs:
           name: plugins-${{ matrix.platform }}-${{ strategy.job-index }}
           retention-days: 3
           path: |
-            bridge/bridge-*
+            bridge-src/bridge-*
           if-no-files-found: warn
 
   publish-release:
