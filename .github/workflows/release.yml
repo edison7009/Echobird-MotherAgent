@@ -89,33 +89,34 @@ jobs:
           else { console.error(`\n${errors} i18n error(s) found`); process.exit(1); }
           EOF
 
-      - name: Build Tauri app
-        uses: tauri-apps/tauri-action@v0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          args: ${{ matrix.args }}
-
-      - name: Build bridge binary
+      - name: Build bridge binary (MUST run before Tauri to bundle fresh binaries)
         shell: bash
         run: |
           cd bridge-src
           if [[ "${{ matrix.args }}" == *"aarch64-apple-darwin"* ]]; then
             cargo build --release --target aarch64-apple-darwin
-            cp target/aarch64-apple-darwin/release/echobird-bridge bridge-darwin-aarch64
+            cp target/aarch64-apple-darwin/release/echobird-bridge ../bridge/bridge-darwin-aarch64
           elif [[ "${{ matrix.args }}" == *"x86_64-apple-darwin"* ]]; then
             cargo build --release --target x86_64-apple-darwin
-            cp target/x86_64-apple-darwin/release/echobird-bridge bridge-darwin-x86_64
+            cp target/x86_64-apple-darwin/release/echobird-bridge ../bridge/bridge-darwin-x86_64
           elif [[ "${{ matrix.platform }}" == "ubuntu-22.04" ]]; then
             cargo build --release
-            cp target/release/echobird-bridge bridge-linux-x86_64
-            # Cross-compile for Linux aarch64
+            cp target/release/echobird-bridge ../bridge/bridge-linux-x86_64
             CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER=aarch64-linux-gnu-gcc cargo build --release --target aarch64-unknown-linux-gnu
-            cp target/aarch64-unknown-linux-gnu/release/echobird-bridge bridge-linux-aarch64
+            cp target/aarch64-unknown-linux-gnu/release/echobird-bridge ../bridge/bridge-linux-aarch64
           elif [[ "${{ matrix.platform }}" == "windows-latest" ]]; then
             cargo build --release
-            cp target/release/echobird-bridge.exe bridge-win.exe
+            cp target/release/echobird-bridge.exe ../bridge/bridge-win.exe
           fi
+          echo "Bridge binaries in bridge/:"
+          ls -la ../bridge/bridge-*
+
+      - name: Build Tauri app (bundles bridge/ binaries via resources)
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          args: ${{ matrix.args }}
 
 
       - name: Upload app artifacts
@@ -138,7 +139,7 @@ jobs:
           name: plugins-${{ matrix.platform }}-${{ strategy.job-index }}
           retention-days: 3
           path: |
-            bridge-src/bridge-*
+            bridge/bridge-*
           if-no-files-found: warn
 
   publish-release:
