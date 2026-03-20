@@ -8,7 +8,88 @@ env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
+  # ════════════════════════════════════════════════════════════════════
+  # Stage 1: Build all 5 Bridge binaries across platforms
+  # ════════════════════════════════════════════════════════════════════
+  build-bridge:
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: windows-latest
+            targets: ''
+          - platform: macos-latest
+            targets: 'aarch64-apple-darwin,x86_64-apple-darwin'
+          - platform: ubuntu-22.04
+            targets: 'aarch64-unknown-linux-gnu'
+
+    runs-on: ${{ matrix.platform }}
+
+    steps:
+      - name: Checkout private repo
+        uses: actions/checkout@v4
+        with:
+          repository: edison7009/Echobird
+          token: ${{ secrets.PRIVATE_REPO_TOKEN }}
+          ref: ${{ github.event.client_payload.ref }}
+
+      - name: Install Rust stable
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.targets }}
+
+      - name: Install Linux cross-compilation tools
+        if: matrix.platform == 'ubuntu-22.04'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-aarch64-linux-gnu
+          rustup target add aarch64-unknown-linux-gnu
+
+      - name: Build Bridge binaries
+        shell: bash
+        run: |
+          cd bridge-src
+          mkdir -p ../bridge-artifacts
+
+          if [[ "${{ matrix.platform }}" == "windows-latest" ]]; then
+            cargo build --release
+            cp target/release/echobird-bridge.exe ../bridge-artifacts/bridge-win.exe
+            echo "Built: bridge-win.exe"
+
+          elif [[ "${{ matrix.platform }}" == "macos-latest" ]]; then
+            cargo build --release --target aarch64-apple-darwin
+            cp target/aarch64-apple-darwin/release/echobird-bridge ../bridge-artifacts/bridge-darwin-aarch64
+
+            cargo build --release --target x86_64-apple-darwin
+            cp target/x86_64-apple-darwin/release/echobird-bridge ../bridge-artifacts/bridge-darwin-x86_64
+            echo "Built: bridge-darwin-aarch64, bridge-darwin-x86_64"
+
+          elif [[ "${{ matrix.platform }}" == "ubuntu-22.04" ]]; then
+            cargo build --release
+            cp target/release/echobird-bridge ../bridge-artifacts/bridge-linux-x86_64
+
+            CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER=aarch64-linux-gnu-gcc \
+              cargo build --release --target aarch64-unknown-linux-gnu
+            cp target/aarch64-unknown-linux-gnu/release/echobird-bridge ../bridge-artifacts/bridge-linux-aarch64
+            echo "Built: bridge-linux-x86_64, bridge-linux-aarch64"
+          fi
+
+          ls -la ../bridge-artifacts/
+
+      - name: Upload Bridge artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: bridge-${{ matrix.platform }}
+          retention-days: 3
+          path: bridge-artifacts/bridge-*
+
+  # ════════════════════════════════════════════════════════════════════
+  # Stage 2: Build main app (downloads ALL 5 Bridge binaries first)
+  # ════════════════════════════════════════════════════════════════════
   publish-tauri:
+    needs: build-bridge
     permissions:
       contents: write
     strategy:
@@ -33,6 +114,22 @@ jobs:
           repository: edison7009/Echobird
           token: ${{ secrets.PRIVATE_REPO_TOKEN }}
           ref: ${{ github.event.client_payload.ref }}
+
+      - name: Download ALL Bridge binaries from Stage 1
+        uses: actions/download-artifact@v4
+        with:
+          pattern: bridge-*
+          path: bridge-download/
+          merge-multiple: true
+
+      - name: Copy Bridge binaries to bridge/ directory
+        shell: bash
+        run: |
+          echo "=== Downloaded Bridge binaries ==="
+          ls -la bridge-download/
+          cp bridge-download/bridge-* bridge/
+          echo "=== bridge/ directory (all 5 platforms) ==="
+          ls -la bridge/bridge-*
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -66,7 +163,7 @@ jobs:
       - name: Validate i18n files (encoding + syntax)
         shell: bash
         run: |
-          node --input-type=module << 'EOF'
+          node --input-type=module <<'EOF'
           import { readFileSync, readdirSync } from 'fs';
           import { join } from 'path';
           const dir = 'src/i18n';
@@ -89,35 +186,12 @@ jobs:
           else { console.error(`\n${errors} i18n error(s) found`); process.exit(1); }
           EOF
 
-      - name: Build bridge binary (MUST run before Tauri to bundle fresh binaries)
-        shell: bash
-        run: |
-          cd bridge-src
-          if [[ "${{ matrix.args }}" == *"aarch64-apple-darwin"* ]]; then
-            cargo build --release --target aarch64-apple-darwin
-            cp target/aarch64-apple-darwin/release/echobird-bridge ../bridge/bridge-darwin-aarch64
-          elif [[ "${{ matrix.args }}" == *"x86_64-apple-darwin"* ]]; then
-            cargo build --release --target x86_64-apple-darwin
-            cp target/x86_64-apple-darwin/release/echobird-bridge ../bridge/bridge-darwin-x86_64
-          elif [[ "${{ matrix.platform }}" == "ubuntu-22.04" ]]; then
-            cargo build --release
-            cp target/release/echobird-bridge ../bridge/bridge-linux-x86_64
-            CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER=aarch64-linux-gnu-gcc cargo build --release --target aarch64-unknown-linux-gnu
-            cp target/aarch64-unknown-linux-gnu/release/echobird-bridge ../bridge/bridge-linux-aarch64
-          elif [[ "${{ matrix.platform }}" == "windows-latest" ]]; then
-            cargo build --release
-            cp target/release/echobird-bridge.exe ../bridge/bridge-win.exe
-          fi
-          echo "Bridge binaries in bridge/:"
-          ls -la ../bridge/bridge-*
-
       - name: Build Tauri app (bundles bridge/ binaries via resources)
         uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           args: ${{ matrix.args }}
-
 
       - name: Upload app artifacts
         uses: actions/upload-artifact@v4
@@ -133,15 +207,9 @@ jobs:
             src-tauri/target/**/release/bundle/**/*.rpm
           if-no-files-found: warn
 
-      - name: Upload bridge artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: plugins-${{ matrix.platform }}-${{ strategy.job-index }}
-          retention-days: 3
-          path: |
-            bridge/bridge-*
-          if-no-files-found: warn
-
+  # ════════════════════════════════════════════════════════════════════
+  # Stage 3: Collect all artifacts and create draft release
+  # ════════════════════════════════════════════════════════════════════
   publish-release:
     needs: publish-tauri
     runs-on: ubuntu-latest
