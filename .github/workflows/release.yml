@@ -208,10 +208,74 @@ jobs:
           if-no-files-found: warn
 
   # ════════════════════════════════════════════════════════════════════
+  # Stage 2b: Build Android APK (runs in parallel with desktop builds)
+  # ════════════════════════════════════════════════════════════════════
+  build-android:
+    needs: build-bridge
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout private repo
+        uses: actions/checkout@v4
+        with:
+          repository: edison7009/Echobird
+          token: ${{ secrets.PRIVATE_REPO_TOKEN }}
+          ref: ${{ github.event.client_payload.ref }}
+
+      - name: Setup Java JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android NDK
+        run: |
+          sdkmanager --install "ndk;27.0.12077973"
+          echo "NDK_HOME=$ANDROID_HOME/ndk/27.0.12077973" >> $GITHUB_ENV
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Rust stable with Android targets
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: 'aarch64-linux-android,armv7-linux-androideabi,i686-linux-android,x86_64-linux-android'
+
+      - name: Install frontend dependencies
+        run: npm install
+
+      - name: Install Tauri CLI
+        run: npm install -g @tauri-apps/cli
+
+      - name: Build Android APK (debug)
+        run: cargo tauri android build --debug --apk
+
+      - name: Rename and upload APK
+        run: |
+          mkdir -p android-artifacts
+          cp src-tauri/gen/android/app/build/outputs/apk/universal/debug/app-universal-debug.apk android-artifacts/Echobird-android.apk
+          echo "✅ Echobird-android.apk"
+          ls -la android-artifacts/
+
+      - name: Upload Android artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-android
+          retention-days: 3
+          path: android-artifacts/Echobird-android.apk
+
+  # ════════════════════════════════════════════════════════════════════
   # Stage 3: Collect all artifacts and create draft release
   # ════════════════════════════════════════════════════════════════════
   publish-release:
-    needs: publish-tauri
+    needs: [publish-tauri, build-android]
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -235,7 +299,7 @@ jobs:
       - name: Deduplicate release assets
         run: |
           mkdir -p release-assets
-          find artifacts/ -type f \( -name "*.exe" -o -name "*.msi" -o -name "*.dmg" -o -name "*.deb" -o -name "*.rpm" -o -name "*.AppImage" -o -name "bridge-*" \) | while read f; do
+          find artifacts/ -type f \( -name "*.exe" -o -name "*.msi" -o -name "*.dmg" -o -name "*.deb" -o -name "*.rpm" -o -name "*.AppImage" -o -name "*.apk" -o -name "bridge-*" \) | while read f; do
             base=$(basename "$f")
             if [ ! -f "release-assets/$base" ]; then
               cp "$f" "release-assets/$base"
