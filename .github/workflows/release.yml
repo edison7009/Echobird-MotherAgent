@@ -255,7 +255,7 @@ jobs:
         run: npm install -g @tauri-apps/cli
 
       - name: Build Android APK (debug)
-        run: cargo tauri android build --debug --apk
+        run: npx tauri android build --debug --apk
 
       - name: Rename and upload APK
         run: |
