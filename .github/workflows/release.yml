@@ -246,7 +246,7 @@ jobs:
       - name: Install Rust stable with Android targets
         uses: dtolnay/rust-toolchain@stable
         with:
-          targets: 'aarch64-linux-android,armv7-linux-androideabi,i686-linux-android,x86_64-linux-android'
+          targets: 'aarch64-linux-android'
 
       - name: Install frontend dependencies
         run: npm install
@@ -259,14 +259,14 @@ jobs:
       - name: Clean stale jniLibs symlinks
         run: rm -rf src-tauri/gen/android/app/src/main/jniLibs/
 
-      - name: Build Android APK (debug)
-        run: cargo tauri android build --debug --apk
+      - name: Build Android APK (arm64 release)
+        run: cargo tauri android build --target aarch64 --apk
 
       - name: Rename and upload APK
         run: |
           mkdir -p android-artifacts
-          cp src-tauri/gen/android/app/build/outputs/apk/universal/debug/app-universal-debug.apk android-artifacts/Echobird-android.apk
-          echo "✅ Echobird-android.apk"
+          cp src-tauri/gen/android/app/build/outputs/apk/arm64/release/app-arm64-release-unsigned.apk android-artifacts/Echobird-android.apk
+          echo "✅ Echobird-android.apk (arm64 release)"
           ls -la android-artifacts/
 
       - name: Upload Android artifact
