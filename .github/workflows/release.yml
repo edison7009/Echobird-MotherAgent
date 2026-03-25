@@ -251,11 +251,16 @@ jobs:
       - name: Install frontend dependencies
         run: npm install
 
-      - name: Install Tauri CLI
-        run: npm install -g @tauri-apps/cli
+      - name: Install Tauri CLI (cargo binary)
+        run: |
+          curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
+          cargo binstall tauri-cli -y --locked
+
+      - name: Clean stale jniLibs symlinks
+        run: rm -rf src-tauri/gen/android/app/src/main/jniLibs/
 
       - name: Build Android APK (debug)
-        run: npx tauri android build --debug --apk
+        run: cargo tauri android build --debug --apk
 
       - name: Rename and upload APK
         run: |
