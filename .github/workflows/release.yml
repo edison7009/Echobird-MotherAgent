@@ -265,8 +265,8 @@ jobs:
       - name: Rename and upload APK
         run: |
           mkdir -p android-artifacts
-          cp src-tauri/gen/android/app/build/outputs/apk/arm64/release/app-arm64-release-unsigned.apk android-artifacts/Echobird-android.apk
-          echo "✅ Echobird-android.apk (arm64 release)"
+          cp src-tauri/gen/android/app/build/outputs/apk/arm64/release/app-arm64-release-unsigned.apk android-artifacts/Echobird-android-${{ github.event.client_payload.tag }}.apk
+          echo "✅ Echobird-android-${{ github.event.client_payload.tag }}.apk (arm64 release)"
           ls -la android-artifacts/
 
       - name: Upload Android artifact
