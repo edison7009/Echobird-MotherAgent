@@ -264,9 +264,16 @@ jobs:
 
       - name: Rename and upload APK
         run: |
+          echo "=== APK build outputs ==="
+          find src-tauri/gen/android -name '*.apk' -type f 2>/dev/null || echo "(no APK files found)"
           mkdir -p android-artifacts
-          cp src-tauri/gen/android/app/build/outputs/apk/arm64/release/app-arm64-release-unsigned.apk android-artifacts/Echobird-android-${{ github.event.client_payload.tag }}.apk
-          echo "✅ Echobird-android-${{ github.event.client_payload.tag }}.apk (arm64 release)"
+          APK=$(find src-tauri/gen/android -name '*.apk' -type f | head -1)
+          if [ -z "$APK" ]; then
+            echo "❌ No APK found in build outputs"
+            exit 1
+          fi
+          cp "$APK" android-artifacts/Echobird-android-${{ github.event.client_payload.tag }}.apk
+          echo "✅ Echobird-android-${{ github.event.client_payload.tag }}.apk (from $APK)"
           ls -la android-artifacts/
 
       - name: Upload Android artifact
@@ -274,7 +281,7 @@ jobs:
         with:
           name: release-android
           retention-days: 3
-          path: android-artifacts/Echobird-android.apk
+          path: android-artifacts/Echobird-android-*.apk
 
   # ════════════════════════════════════════════════════════════════════
   # Stage 3: Collect all artifacts and create draft release
