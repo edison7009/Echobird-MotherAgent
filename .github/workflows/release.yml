@@ -262,18 +262,34 @@ jobs:
       - name: Build Android APK (arm64 release)
         run: cargo tauri android build --target aarch64 --apk
 
-      - name: Rename and upload APK
+      - name: Sign APK with release keystore
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: |
-          echo "=== APK build outputs ==="
-          find src-tauri/gen/android -name '*.apk' -type f 2>/dev/null || echo "(no APK files found)"
-          mkdir -p android-artifacts
+          echo "$KEYSTORE_BASE64" | base64 -d > /tmp/release.keystore
           APK=$(find src-tauri/gen/android -name '*.apk' -type f | head -1)
           if [ -z "$APK" ]; then
-            echo "❌ No APK found in build outputs"
+            echo "❌ No APK found to sign"
             exit 1
           fi
-          cp "$APK" android-artifacts/Echobird-android-${{ github.event.client_payload.tag }}.apk
-          echo "✅ Echobird-android-${{ github.event.client_payload.tag }}.apk (from $APK)"
+          SIGNED="${APK%.apk}-signed.apk"
+          $ANDROID_HOME/build-tools/*/apksigner sign \
+            --ks /tmp/release.keystore \
+            --ks-pass pass:$KEYSTORE_PASSWORD \
+            --key-pass pass:$KEY_PASSWORD \
+            --ks-key-alias "$KEY_ALIAS" \
+            --out "$SIGNED" "$APK"
+          echo "SIGNED_APK=$SIGNED" >> $GITHUB_ENV
+          echo "✅ Signed: $SIGNED"
+
+      - name: Rename and upload APK
+        run: |
+          mkdir -p android-artifacts
+          cp "$SIGNED_APK" android-artifacts/Echobird-android-${{ github.event.client_payload.tag }}.apk
+          echo "✅ Echobird-android-${{ github.event.client_payload.tag }}.apk (signed)"
           ls -la android-artifacts/
 
       - name: Upload Android artifact
