@@ -276,7 +276,8 @@ jobs:
             exit 1
           fi
           SIGNED="${APK%.apk}-signed.apk"
-          $ANDROID_HOME/build-tools/*/apksigner sign \
+          APKSIGNER=$(ls -1d $ANDROID_HOME/build-tools/* | tail -n 1)/apksigner
+          "$APKSIGNER" sign \
             --ks /tmp/release.keystore \
             --ks-pass pass:$KEYSTORE_PASSWORD \
             --key-pass pass:$KEY_PASSWORD \
