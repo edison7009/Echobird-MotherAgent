@@ -1,6 +1,1 @@
-﻿{
-    "version": "2.0.0",
-    "releaseDate": "2026-03-02",
-    "releaseNotes": "Complete rewrite from Electron/Node.js to Tauri + Rust. Agent session persistence, Remote LLM support, Skill Browser, Mother Agent, Plugin system.",
-    "downloadUrl": "https://github.com/edison7009/Echobird-MotherAgent/releases/latest"
-}
+{"version": "3.6.1","releaseDate": "2026-03-30","releaseNotes": "Critical Stability Update:\n1. OpenClaw Cold Start Fix: Implemented dynamic port polling to ensure agent dependencies are fully loaded before communication attempts, resolving \u0027ECONNREFUSED\u0027 errors on fresh installations.\n2. Deep Cleanup: Cut off all rogue Gateway debug outputs (like `[agent/embedded]`) from spilling into the parent IDE environment, ensuring completely clean background executions."}
